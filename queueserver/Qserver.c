@@ -2,8 +2,10 @@
 #include <string.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <arpa/inet.h>
 #define SSLOG_EXTERN
 
+bool isValidIpAddress(char *ipAddress);
 void clean_triples_from_ss();
 int main()
 {
@@ -194,4 +196,10 @@ int main()
 	printf("\nKP leave SS...\n");
 
 	return 0;
+}
+bool isValidIpAddress(char *ipAddress)
+{
+    struct sockaddr_in sa;
+    int result = inet_pton(AF_INET, ipAddress, &(sa.sin_addr));
+    return result != 0;
 }
