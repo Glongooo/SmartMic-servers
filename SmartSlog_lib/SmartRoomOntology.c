@@ -1,4 +1,4 @@
-#include "SmartRoomOntology.h"
+#include "generic.h"
 
 
 
@@ -129,6 +129,9 @@ property_t *PROPERTY_STARTMEETING;
 #endif
 #if INCLUDE_PROPERTY_SECTIONPARAMETER
 property_t *PROPERTY_SECTIONPARAMETER;
+#endif
+#if INCLUDE_PROPERTY_REQUESTPLACE
+property_t *PROPERTY_REQUESTPLACE;
 #endif
 #if INCLUDE_PROPERTY_STARTUPDATESERVICEPAGE
 property_t *PROPERTY_STARTUPDATESERVICEPAGE;
@@ -515,7 +518,7 @@ PROPERTY_STARTMEETING =  (property_t *) malloc(sizeof(property_t));
 PROPERTY_STARTMEETING->name = strdup("http://www.cs.karelia.ru/smartroom#startMeeting");
 PROPERTY_STARTMEETING->about = strdup("startMeeting");
 //PROPERTY_STARTMEETING->range = "http://www.cs.karelia.ru/smartroom#Section"; //getRange
-PROPERTY_STARTMEETING->domain = strdup("-260c49d6:154b40996a6:-7ff7"); 
+PROPERTY_STARTMEETING->domain = strdup("1ee0331f:154e1bb8faa:-7ff7"); 
 PROPERTY_STARTMEETING->maxcardinality = -1;
 PROPERTY_STARTMEETING->mincardinality = -1;
 PROPERTY_STARTMEETING->subpropertyof = NULL;
@@ -545,6 +548,25 @@ PROPERTY_SECTIONPARAMETER->type = OBJECTPROPERTY;
 
 
 sslog_repo_add_entity((void *) PROPERTY_SECTIONPARAMETER);
+
+#endif
+#if INCLUDE_PROPERTY_REQUESTPLACE
+
+PROPERTY_REQUESTPLACE =  (property_t *) malloc(sizeof(property_t));
+PROPERTY_REQUESTPLACE->name = strdup("http://www.cs.karelia.ru/smartroom#requestPlace");
+PROPERTY_REQUESTPLACE->about = strdup("requestPlace");
+//PROPERTY_REQUESTPLACE->range = "http://www.w3.org/2001/XMLSchema#string"; //getRange
+PROPERTY_REQUESTPLACE->domain = strdup("http://www.cs.karelia.ru/smartroom#Request"); 
+PROPERTY_REQUESTPLACE->maxcardinality = -1;
+PROPERTY_REQUESTPLACE->mincardinality = -1;
+PROPERTY_REQUESTPLACE->subpropertyof = NULL;
+PROPERTY_REQUESTPLACE->oneof = list_get_new_list();  
+PROPERTY_REQUESTPLACE->rtti = RTTI_PROPERTY;
+PROPERTY_REQUESTPLACE->type = DATATYPEPROPERTY;
+
+
+
+sslog_repo_add_entity((void *) PROPERTY_REQUESTPLACE);
 
 #endif
 #if INCLUDE_PROPERTY_STARTUPDATESERVICEPAGE
@@ -724,7 +746,7 @@ PROPERTY_ENDPRESENTATION =  (property_t *) malloc(sizeof(property_t));
 PROPERTY_ENDPRESENTATION->name = strdup("http://www.cs.karelia.ru/smartroom#endPresentation");
 PROPERTY_ENDPRESENTATION->about = strdup("endPresentation");
 //PROPERTY_ENDPRESENTATION->range = "http://www.cs.karelia.ru/smartroom#Presentation"; //getRange
-PROPERTY_ENDPRESENTATION->domain = strdup("-260c49d6:154b40996a6:-7ff1"); 
+PROPERTY_ENDPRESENTATION->domain = strdup("1ee0331f:154e1bb8faa:-7ff1"); 
 PROPERTY_ENDPRESENTATION->maxcardinality = -1;
 PROPERTY_ENDPRESENTATION->mincardinality = -1;
 PROPERTY_ENDPRESENTATION->subpropertyof = NULL;
@@ -800,7 +822,7 @@ PROPERTY_STARTSERVICEMODE =  (property_t *) malloc(sizeof(property_t));
 PROPERTY_STARTSERVICEMODE->name = strdup("http://www.cs.karelia.ru/smartroom#startServiceMode");
 PROPERTY_STARTSERVICEMODE->about = strdup("startServiceMode");
 //PROPERTY_STARTSERVICEMODE->range = "http://www.cs.karelia.ru/smartroom#Service"; //getRange
-PROPERTY_STARTSERVICEMODE->domain = strdup("-260c49d6:154b40996a6:-7fe9"); 
+PROPERTY_STARTSERVICEMODE->domain = strdup("1ee0331f:154e1bb8faa:-7fe9"); 
 PROPERTY_STARTSERVICEMODE->maxcardinality = -1;
 PROPERTY_STARTSERVICEMODE->mincardinality = -1;
 PROPERTY_STARTSERVICEMODE->subpropertyof = NULL;
@@ -1199,7 +1221,7 @@ PROPERTY_STARTCONFERENCE =  (property_t *) malloc(sizeof(property_t));
 PROPERTY_STARTCONFERENCE->name = strdup("http://www.cs.karelia.ru/smartroom#startConference");
 PROPERTY_STARTCONFERENCE->about = strdup("startConference");
 //PROPERTY_STARTCONFERENCE->range = "http://www.cs.karelia.ru/smartroom#Section"; //getRange
-PROPERTY_STARTCONFERENCE->domain = strdup("-260c49d6:154b40996a6:-7ffd"); 
+PROPERTY_STARTCONFERENCE->domain = strdup("1ee0331f:154e1bb8faa:-7ffd"); 
 PROPERTY_STARTCONFERENCE->maxcardinality = -1;
 PROPERTY_STARTCONFERENCE->mincardinality = -1;
 PROPERTY_STARTCONFERENCE->subpropertyof = NULL;
@@ -1427,7 +1449,7 @@ PROPERTY_STOPSERVICEMODE =  (property_t *) malloc(sizeof(property_t));
 PROPERTY_STOPSERVICEMODE->name = strdup("http://www.cs.karelia.ru/smartroom#stopServiceMode");
 PROPERTY_STOPSERVICEMODE->about = strdup("stopServiceMode");
 //PROPERTY_STOPSERVICEMODE->range = "http://www.cs.karelia.ru/smartroom#Service"; //getRange
-PROPERTY_STOPSERVICEMODE->domain = strdup("-260c49d6:154b40996a6:-7fe6"); 
+PROPERTY_STOPSERVICEMODE->domain = strdup("1ee0331f:154e1bb8faa:-7fe6"); 
 PROPERTY_STOPSERVICEMODE->maxcardinality = -1;
 PROPERTY_STOPSERVICEMODE->mincardinality = -1;
 PROPERTY_STOPSERVICEMODE->subpropertyof = NULL;
@@ -1731,7 +1753,7 @@ PROPERTY_STARTPRESENTATION =  (property_t *) malloc(sizeof(property_t));
 PROPERTY_STARTPRESENTATION->name = strdup("http://www.cs.karelia.ru/smartroom#startPresentation");
 PROPERTY_STARTPRESENTATION->about = strdup("startPresentation");
 //PROPERTY_STARTPRESENTATION->range = "http://www.cs.karelia.ru/smartroom#Presentation"; //getRange
-PROPERTY_STARTPRESENTATION->domain = strdup("-260c49d6:154b40996a6:-7ff4"); 
+PROPERTY_STARTPRESENTATION->domain = strdup("1ee0331f:154e1bb8faa:-7ff4"); 
 PROPERTY_STARTPRESENTATION->maxcardinality = -1;
 PROPERTY_STARTPRESENTATION->mincardinality = -1;
 PROPERTY_STARTPRESENTATION->subpropertyof = NULL;
@@ -2035,7 +2057,7 @@ PROPERTY_ENDCONFERENCE =  (property_t *) malloc(sizeof(property_t));
 PROPERTY_ENDCONFERENCE->name = strdup("http://www.cs.karelia.ru/smartroom#endConference");
 PROPERTY_ENDCONFERENCE->about = strdup("endConference");
 //PROPERTY_ENDCONFERENCE->range = "http://www.cs.karelia.ru/smartroom#Section"; //getRange
-PROPERTY_ENDCONFERENCE->domain = strdup("-260c49d6:154b40996a6:-7ffa"); 
+PROPERTY_ENDCONFERENCE->domain = strdup("1ee0331f:154e1bb8faa:-7ffa"); 
 PROPERTY_ENDCONFERENCE->maxcardinality = -1;
 PROPERTY_ENDCONFERENCE->mincardinality = -1;
 PROPERTY_ENDCONFERENCE->subpropertyof = NULL;
@@ -2320,7 +2342,7 @@ PROPERTY_UPDATEAGENDA =  (property_t *) malloc(sizeof(property_t));
 PROPERTY_UPDATEAGENDA->name = strdup("http://www.cs.karelia.ru/smartroom#updateAgenda");
 PROPERTY_UPDATEAGENDA->about = strdup("updateAgenda");
 //PROPERTY_UPDATEAGENDA->range = "http://www.cs.karelia.ru/smartroom#Section"; //getRange
-PROPERTY_UPDATEAGENDA->domain = strdup("-260c49d6:154b40996a6:-7fec"); 
+PROPERTY_UPDATEAGENDA->domain = strdup("1ee0331f:154e1bb8faa:-7fec"); 
 PROPERTY_UPDATEAGENDA->maxcardinality = -1;
 PROPERTY_UPDATEAGENDA->mincardinality = -1;
 PROPERTY_UPDATEAGENDA->subpropertyof = NULL;
@@ -2969,6 +2991,10 @@ sslog_repo_add_entity((void *) CLASS_NOTHING);
 
 #if INCLUDE_PROPERTY_REQUESTUSERNAME
 tmp_node = list_get_new_node(PROPERTY_REQUESTUSERNAME);
+list_add_node(tmp_node, CLASS_NOTHING->properties);
+#endif
+#if INCLUDE_PROPERTY_REQUESTPLACE
+tmp_node = list_get_new_node(PROPERTY_REQUESTPLACE);
 list_add_node(tmp_node, CLASS_NOTHING->properties);
 #endif
 #if INCLUDE_PROPERTY_SECTIONDATE
@@ -4087,6 +4113,10 @@ sslog_repo_add_entity((void *) CLASS_REQUEST);
 
 #if INCLUDE_PROPERTY_REQUESTUSERNAME
 tmp_node = list_get_new_node(PROPERTY_REQUESTUSERNAME);
+list_add_node(tmp_node, CLASS_REQUEST->properties);
+#endif
+#if INCLUDE_PROPERTY_REQUESTPLACE
+tmp_node = list_get_new_node(PROPERTY_REQUESTPLACE);
 list_add_node(tmp_node, CLASS_REQUEST->properties);
 #endif
 #if INCLUDE_PROPERTY_HASSTATE

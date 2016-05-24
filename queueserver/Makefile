@@ -32,7 +32,7 @@ PKG_LDFLAGS := $(shell pkg-config --libs $(pkg_packages))
 all : $(targets)
 
 main: $(OBJECT) Qserver.o
-	$(CC) $(LFLAGS) $(PKG_LDFLAGS) Qserver.o $(OBJECT) $(LIBS) -o $(PROGRAM_NAME)
+	 $(CC) $(LFLAGS) $(PKG_LDFLAGS) Qserver.o $(OBJECT) $(LIBS) -o $(PROGRAM_NAME)
 
 .c.o:
 	$(CC) $(CFLAGS) $(PKG_CFLAGS) $(LFLAGS) -o $@ $<
