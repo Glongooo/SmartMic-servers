@@ -58,7 +58,8 @@ SRCS =  ./SmartSlog/classes.c \
 	./SmartSlog/ckpi/sib_access_tcp.c \
 	./SmartSlog/ckpi/sskp_errno.c \
 	./Ontology/SmartRoomOntology.c \
-	./src/kp.c
+	./src/kp.c \
+	./queueserver/Qserver.c 
 
 OBJS = $(SRCS:.c=.o)
 TARGET = MicServer

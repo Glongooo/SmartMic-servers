@@ -56,9 +56,9 @@ SRCS =  ./SmartSlog/classes.c \
 	./SmartSlog/ckpi/process_ssap_cnf.c \
 	./SmartSlog/ckpi/sib_access_tcp.c \
 	./SmartSlog/ckpi/sskp_errno.c \
-	./Ontology/SmartRoomOntology.c \
-	./src/kp.c
-	./queueserver/phone.c
+	./SmartSlog_lib/SmartRoomOntology.c \
+	./src/kp.c \
+	./queueserver/Qserver.c 
 
 OBJS = $(SRCS:.c=.o)
 TARGET = Phone

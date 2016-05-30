@@ -10,7 +10,9 @@ OBJECT = ../SmartSlog_lib/SmartRoomOntology.o
 
 THREADS := -pthread
 #EXPAT_AND_SCEW := -L/usr/lib -L/usr/local/lib -lexpat -lscew -lsmartslog
-#INCLUDES := -I/usr/local/include -I/usr/local/include/scew -I/home/vanag/mag/install/KPI_Low/ -I/usr/local/include/smartslog/
+INCLUDES = -I$(CURDIR)/SmartSlog -I$(CURDIR)/includes/expat \
+-I$(CURDIR)/includes/scew -I$(CURDIR)/Ontology \
+-I$(CURDIR)/includes
 LIBS := $(THREADS)  $(EXPAT_AND_SCEW)
 
 CC     = gcc

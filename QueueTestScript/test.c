@@ -29,7 +29,7 @@ int main()
 	//sslog_ss_init_session_with_parameters("X", "194.85.173.9", 10010);
 	register_ontology();
 
-	if (ss_join(sslog_get_ss_info(), "Queue Test") == -1) {
+	if (ss_join(sslog_get_ss_info(), "Queue Test0") == -1) {
 		printf("Can't join to SS\n");
 		return 0;
 	}
@@ -41,7 +41,7 @@ int main()
 		return 0;
 	}
 
-	sslog_ss_init_individual_with_uuid(req, "request 1");
+	sslog_ss_init_individual_with_uuid(req, "request 01");
 
 	while (true) {
 		print_menu();

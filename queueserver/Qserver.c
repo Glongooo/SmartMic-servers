@@ -29,16 +29,32 @@ int kbhit()
     return 0;
 }
  
-#endif _KBHIT_H_
+#endif 
 
+void requestsHandler(subscription_t *);
+void cntrRequestsHandler(subscription_t *);
 bool isValidIpAddress(char *ipAddress);
 void clean_triples_from_ss();
+
+//global variables
+int firstreq = 1;
+int lastreq = 1; 
+char buffer [33] = "";
+char* headuuid="NaN";
+	
+char* headisbusy = "false";
+	
+char s_true[10] = "true";
+char s_false[10]  = "false";
+	
+bool reqAdded = true;
+
+individual_t *head;
+	
 int main()
 {
-    //local variables
-	int firstreq = 1;
-	int lastreq = 1; 
-	
+    //local variables	
+	/*
 	char buffer [33] = "";
 	char* headuuid="NaN";
 	
@@ -48,6 +64,7 @@ int main()
 	char s_false[10]  = "false";
 	
 	bool reqAdded = true;
+	*/
 	
 	individual_t *temp_req;
 	//sslog_ss_init_session();
@@ -60,7 +77,7 @@ int main()
 		return 0;
 	}
 	
-	individual_t *head = sslog_new_individual(CLASS_QUEUEHEAD);
+	head = sslog_new_individual(CLASS_QUEUEHEAD);
 
 	if (head == NULL) {
 		printf("\nError: %s\n", get_error_text());
@@ -93,10 +110,12 @@ int main()
 	
 	subscription_t *reqsub = sslog_new_subscription(true);
 	sslog_sbcr_add_class(reqsub, CLASS_REQUEST);
+	sslog_sbcr_set_changed_handler	(reqsub, requestsHandler);
 	sslog_sbcr_subscribe(reqsub);
 	if(!sslog_sbcr_is_active(reqsub)){
 		printf ("LOG: req subscription not active\n ");
 	}
+	
 	/*
 	if(sslog_sbcr_subscribe(reqsub) != SSLOG_ERROR_NO){
 		printf(ERROR: UNABLE TO SUBSCRIBE REQUESTS\n);
@@ -105,7 +124,7 @@ int main()
 	*/
 	//controll request subscription initialization
 	
-	subscription_t *cnreqsub = sslog_new_subscription(true);
+	subscription_t *cnreqsub = sslog_new_subscription(false);
 	sslog_sbcr_add_class(cnreqsub, CLASS_CONTROLLREQUEST);
 	sslog_sbcr_subscribe(cnreqsub);
 	if(!sslog_sbcr_is_active(cnreqsub)){
@@ -149,94 +168,13 @@ int main()
 		SSLOG_EXTERN list_t* cntr_req_ch_list = NULL;
 	
 	while (true) {
-		if(kbhit()){
-			if (getchar() != 'e' )
-			printf("LOG: Exiting");
-		}
+		
+		if (getchar() == 'e' )
+		printf("LOG: Exiting");
+				
 		
 		
-		//processing removed requests;
-		req_ch_data = sslog_sbcr_get_changes_last(reqsub);
-		sslog_sbcr_ch_print(req_ch_data);
-		rmreq_ch_list = sslog_sbcr_ch_get_individual_by_action(req_ch_data, ACTION_REMOVE); 	
-		if(!list_is_empty(rmreq_ch_list)){
-			printf("\nLOG: Some request were removed.\n");
-			sslog_sbcr_ch_print(req_ch_data);
-			list_head_t* pos = NULL;
-			list_for_each(pos, &rmreq_ch_list->links ){
-				list_t* node = list_entry(pos, list_t, links);
-				char* temp_uuid= (char*)(node->data);
-				if(temp_uuid != NULL ){
-					printf("	\nLOG: Processing request\n");
-					if(!strcmp(temp_uuid, headuuid )){
-						printf ("		LOG:User was in the head. releasing head\n");
-						set_property_by_name(head,PROPERTY_ISBUSY->name, s_false );
-						headuuid = "NaN";
-						firstreq++;
-						headisbusy = s_false;
-						
-					}
-					
-				}
-				
-			}
-				
-			//list_free(rmreq_ch_list);
-		}
 		
-		//processing inserted requests
-		req_ch_list = sslog_sbcr_ch_get_individual_by_action(req_ch_data, ACTION_INSERT);
-		if(!list_is_empty(req_ch_list)){
-			printf("\nLOG: Some requests were inserted.\n");
-			sslog_sbcr_ch_print(req_ch_data);
-			reqAdded = true;
-			
-			list_head_t* pos = NULL;
-			list_for_each(pos, &req_ch_list->links ){
-				
-				list_t* node = list_entry(pos, list_t, links);
-				char* temp_uuid= (char*)(node->data);
-				
-				if(temp_uuid != NULL ){
-					individual_t* temp_req = sslog_repo_get_individual_by_uuid(temp_uuid);	
-					printf("	\nLOG: Processing request\n");
-					char plbuff[10] = "";
-					lastreq ++;
-					sprintf(plbuff, "%d", lastreq);
-					set_property_by_name(temp_req,PROPERTY_REQUESTPLACE->name, plbuff );
-					set_property_by_name(head, PROPERTY_LASTREQ->name, plbuff);
-					printf("	\nLOG: Setting up place: %d\n", lastreq);
-						
-					}
-					
-				
-				
-			}
-			
-			//list_free(req_ch_list);
-		};
-		
-		
-		cntr_req_ch_data = sslog_sbcr_get_changes_last(cnreqsub);
-		cntr_req_ch_list=sslog_sbcr_ch_get_individual_by_action(cntr_req_ch_data, ACTION_INSERT) ;
-		if(!list_is_empty(cntr_req_ch_list)){
-			printf("LOG: Some controll requests were inserted.\n");
-			sslog_sbcr_ch_print(cntr_req_ch_data);
-			
-			list_head_t* pos = NULL;
-			list_for_each(pos, &req_ch_list->links ){
-				list_t* node = list_entry(pos, list_t, links);
-				char* temp_uuid= (char*)(node->data);
-				individual_t* temp_individual = sslog_repo_get_individual_by_uuid(temp_uuid);
-				lastreq++;
-				char temp_str[50];
-				sprintf(buffer, "%d", temp_str);
-				set_property_by_name(temp_individual, PROPERTY_HASSTATE->name, temp_str);
-				
-			}
-			
-			list_free(req_ch_list);
-		}
 		
 		
 		//
@@ -249,7 +187,7 @@ int main()
 			printf("LOG: HEAD IS FREE\n");
 			printf("LOG: SEARCHING FOR NEW REQUESTS\n");
 			individual_t* min_req;
-			int position = 999999;
+			int position = 9999999;
 			list_t* candidates = sslog_ss_get_individual_by_class_all(CLASS_REQUEST);
 			if(!list_is_empty(candidates)){
 				list_head_t* pos = NULL;
@@ -348,4 +286,99 @@ bool isValidIpAddress(char *ipAddress)
     struct sockaddr_in sa;
     int result = inet_pton(AF_INET, ipAddress, &(sa.sin_addr));
     return result != 0;
+}
+
+void cntrRequestsHandler(subscription_t *cnreqsub){
+	
+	subscription_changes_data_t* cntr_req_ch_data = NULL;
+	SSLOG_EXTERN list_t* cntr_req_ch_list = NULL;
+		
+	cntr_req_ch_data = sslog_sbcr_get_changes_last(cnreqsub);
+		cntr_req_ch_list=sslog_sbcr_ch_get_individual_by_action(cntr_req_ch_data, ACTION_INSERT) ;
+		if(!list_is_empty(cntr_req_ch_list)){
+			printf("LOG: Some controll requests were inserted.\n");
+			sslog_sbcr_ch_print(cntr_req_ch_data);
+			
+			list_head_t* pos = NULL;
+			list_for_each(pos, &cntr_req_ch_list->links ){
+				list_t* node = list_entry(pos, list_t, links);
+				char* temp_uuid= (char*)(node->data);
+				individual_t* temp_individual = sslog_repo_get_individual_by_uuid(temp_uuid);
+				lastreq++;
+				char temp_str[50];
+				sprintf(buffer, "%d", temp_str);
+				set_property_by_name(temp_individual, PROPERTY_HASSTATE->name, temp_str);
+				
+			}
+			
+			list_free(cntr_req_ch_list);
+		}
+}
+
+void requestsHandler(subscription_t *reqsub){
+	printf("LOG: processing request handler\n");
+	
+	subscription_changes_data_t* req_ch_data = NULL;
+	SSLOG_EXTERN list_t* req_ch_list = NULL;
+	SSLOG_EXTERN list_t* rmreq_ch_list = NULL;
+	
+	req_ch_data = sslog_sbcr_get_changes_last(reqsub);
+		sslog_sbcr_ch_print(req_ch_data);
+		rmreq_ch_list = sslog_sbcr_ch_get_individual_by_action(req_ch_data, ACTION_REMOVE); 	
+		if(!list_is_empty(rmreq_ch_list)){
+			printf("\nLOG: Some request were removed.\n");
+			sslog_sbcr_ch_print(req_ch_data);
+			list_head_t* pos = NULL;
+			list_for_each(pos, &rmreq_ch_list->links ){
+				list_t* node = list_entry(pos, list_t, links);
+				char* temp_uuid= (char*)(node->data);
+				if(temp_uuid != NULL ){
+					printf("	\nLOG: Processing request\n");
+					if(!strcmp(temp_uuid, headuuid )){
+						printf ("		LOG:User was in the head. releasing head\n");
+						set_property_by_name(head,PROPERTY_ISBUSY->name, s_false );
+						headuuid = "NaN";
+						firstreq++;
+						headisbusy = s_false;
+						
+					}
+					
+				}
+				
+			}
+				
+			//list_free(rmreq_ch_list);
+		}
+		
+		//processing inserted requests
+		req_ch_list = sslog_sbcr_ch_get_individual_by_action(req_ch_data, ACTION_INSERT);
+		if(!list_is_empty(req_ch_list)){
+			printf("\nLOG: Some requests were inserted.\n");
+			sslog_sbcr_ch_print(req_ch_data);
+			reqAdded = true;
+			
+			list_head_t* pos = NULL;
+			list_for_each(pos, &req_ch_list->links ){
+				
+				list_t* node = list_entry(pos, list_t, links);
+				char* temp_uuid= (char*)(node->data);
+				
+				if(temp_uuid != NULL ){
+					individual_t* temp_req = sslog_repo_get_individual_by_uuid(temp_uuid);	
+					printf("	\nLOG: Processing request\n");
+					char plbuff[10] = "";
+					lastreq ++;
+					sprintf(plbuff, "%d", lastreq);
+					set_property_by_name(temp_req,PROPERTY_REQUESTPLACE->name, plbuff );
+					set_property_by_name(head, PROPERTY_LASTREQ->name, plbuff);
+					printf("	\nLOG: Setting up place: %d\n", lastreq);
+						
+					}
+					
+				
+				
+			}
+			
+			//list_free(req_ch_list);
+		};
 }
