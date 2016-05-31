@@ -1,6 +1,6 @@
 
 //Set path to SmartSlog KP Library
-#include <smartslog/generic.h>
+#include "../SmartSlog/generic.h"
 
 #ifndef _GENERATED_ONTOLOGY
 #define	_GENERATED_ONTOLOGY

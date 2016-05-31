@@ -1,5 +1,4 @@
-#include "generic.h"
-
+#include "SmartRoomOntology.h"
 
 
 #if INCLUDE_CLASS_SEARCHACTIVITY
